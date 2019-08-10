@@ -2,7 +2,7 @@
 
 // FUNCTIONS ====================================
 $("document").ready(function () {
-  // TODO User chooses team
+  // User chooses team
 
   $("#league").change(function chooseTeam() {
     var league = $(this);
@@ -10,22 +10,81 @@ $("document").ready(function () {
 
     switch (league.val()) {
       case "NBA":
-        console.log('NBA');
-        $("#team").empty();
-        $("#team").append("<option>NBA</option>");
+        var id = 4387;
+        var sportsURL = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + id;
+        console.log('NBA', sportsURL);
+        
+        $.ajax({
+          url: sportsURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response);
+
+          $("#team").empty();
+
+          var team = response.teams
+
+          for (var t = 0; t < team.length; t++) {
+            console.log(team[t].strTeam);
+            var option = $("<option>");
+            option.addClass("nbaTeam");
+            option.text(team[t].strTeam);
+            $("#team").append(option);
+          }
+        })
         break;
+
       case "WNBA":
-        console.log('WNBA');
-        $("#team").empty();
-        $("#team").append("<option>WNBA</option>");
+        var id = 4516;
+        var sportsURL = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + id;
+        console.log('WNBA', sportsURL);
+
+        $.ajax({
+          url: sportsURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response);
+
+          $("#team").empty();
+
+          var team = response.teams
+
+          for (var t = 0; t < team.length; t++) {
+            console.log(team[t].strTeam)
+            var option = $("<option>");
+            option.addClass("wnbaTeam");
+            option.text(team[t].strTeam);
+            $("#team").append(option);
+          }
+        })
         break;
+
       case "NFL":
-        console.log('NFL');
-        $("#team").empty();
-        $("#team").append("<option>NFL</option>");
+        var id = 4391;
+        var sportsURL = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + id;
+        console.log('NFL', sportsURL);
+        $.ajax({
+          url: sportsURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response);
+
+          $("#team").empty();
+
+          var team = response.teams
+
+          for (var t = 0; t < team.length; t++){
+            console.log(team[t].strTeam)
+            var option = $("<option>");
+            option.addClass("nflTeam");
+            option.text(team[t].strTeam);
+            $("#team").append(option);
+          }
+        })
         break;
     }
   })
+
 // TODO Pull team schedule
 // TODO Show schedule in first column
 // TODO User chooses game
