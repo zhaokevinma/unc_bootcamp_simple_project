@@ -3,21 +3,80 @@
   <head>
     <meta charset='UTF-8'>
     <title> Project 1 </title>
-
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- style.css -->
     <link rel='stylesheet' href='assets/css/style.css'>
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Grenze&display=swap" rel="stylesheet">
   </head>
 
   <body>
+    <div class="jumbotron">Sports All-In-One</div>
 
-  <!-- Scripts -->
-  <!-- jQuery -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-  <!-- Core Firebase -->
-  <script src='https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js'></script>
-  <!-- Firebase Database -->
-  <script src='https://www.gstatic.com/firebasejs/6.3.4/firebase-database.js'></script>  
-  <!-- Javascript -->
-  <script src='assets/javascript/app.js'></script>
+    <div class="containter">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="card">
+            <img src="assets/images/sportCard.jpg" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Pick your game!</h5>
+              <form action="">
+                <div class="form-group">
+                  <label for="league">What league?</label>
+                  <select class="form-control" id="league">
+                    <option>NBA</option>
+                    <option>WNBA</option>
+                    <option>NFL</option>
+                  </select>
+
+                  <label for="team">What team?</label>
+                  <select class="form-control" id="team">
+                    <option>depends on leagure</option>
+                    <option>depends on leagure</option>
+                    <option>depends on leagure</option>
+                    <option>depends on leagure</option>
+                    <option>depends on leagure</option>
+                    <option>depends on leagure</option>
+                    <option>depends on leagure</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <img src="assets/images/hotelCard.jpg" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Pick your stay!</h5>
+              <p class="card-text">This will be a form</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <img src="assets/images/hotelCard.jpg" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Pick your stay!</h5>
+              <p class="card-text">This will be a form</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <!-- Core Firebase -->
+    <script src='https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js'></script>
+    <!-- Firebase Database -->
+    <script src='https://www.gstatic.com/firebasejs/6.3.4/firebase-database.js'></script>  
+    <!-- Javascript -->
+    <script src='assets/javascript/app.js'></script>
   </body>
 
 </html>
