@@ -6,17 +6,14 @@
     height: 100vh;
     border-radius: 0;
     overflow: hidden;
+    margin-bottom: 0;
 }
 
 .vision {
     height: 100vh;
     overflow: hidden;
     font-family: 'Indie Flower', cursive;
-}
-
-.logo {
-    display: block;
-    margin: 10px auto;
+    background-color: blanchedalmond;
 }
 
 .card {
@@ -35,13 +32,15 @@
     width: 400px;
 }
 
-.steps {
+.wrapper {
     height: 100vh;
     overflow: hidden;
+    background-color: white;
 }
 
 .stepsPanel {
     text-align: center;
+    font-size: 64px;
     margin-top: 20px;
     margin-bottom: 30px;
 }
