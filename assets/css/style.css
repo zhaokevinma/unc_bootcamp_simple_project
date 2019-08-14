@@ -1,13 +1,46 @@
 .jumbotron {
-    font-family: 'Grenze', serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 36px;
     text-align: center;
+    background-color:#cceaf7;
+    height: 100vh;
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.vision {
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Indie Flower', cursive;
+    background-color: blanchedalmond;
 }
 
 .card {
     margin: 0 auto;
+    border: none;
 }
 
 .card img {
     height: 240px;
+}
+
+.visionImg {
+    display: block;
+    margin: 5px auto;
+    height: 350px;
+    width: 400px;
+}
+
+.wrapper {
+    height: 100vh;
+    overflow: hidden;
+    background-color: white;
+}
+
+.stepsPanel {
+    text-align: center;
+    font-size: 64px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
