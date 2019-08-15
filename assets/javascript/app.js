@@ -3,6 +3,7 @@ var id;
 var team;
 var teamID;
 var data = [];
+var gameDates = [];
 
 // FUNCTIONS ====================================
 
@@ -108,6 +109,7 @@ $("#league").change(function chooseTeam() {
   }
 })
 
+<<<<<<< HEAD
 
     switch (league.val()) {
       case "NBA":
@@ -235,6 +237,8 @@ $.ajax({
 });
 
 
+=======
+>>>>>>> 1aff3aa6bad2ba5d706c1a7b253f87d4e10119a6
 // User chooses game
 $("#team").change(function chooseGame() {
   console.log("Data: ", data);
@@ -254,35 +258,50 @@ $("#team").change(function chooseGame() {
       }).then(function(response) {
         console.log(response);
 
-        // TODO Empty games dropdown
-        //! $("#games").empty();
+        // Empty games dropdown
+        $("#game").empty();
 
         var games = response.events
 
         // For each response of the AJAX, show the team name in the dropdown
         for (var g = 0; g < games.length; g++){
-        console.log("Event: ", games[g].strEvent)
-        
-        // Get home team id
-        console.log("Home team id: ", games[g].idHomeTeam)
-        // var option = $("<option>");
-        // option.addClass("event");
-        // option.text(games[g].strEvent);
-        // TODO Show schedule in first column
-        //! $("#games").append(option);
+          // Get events
+          console.log("Event: ", games[g].strEvent)
+          
+          // use moment JS to reformat event data
+          var eventDate = games[g].dateEvent
+          var dateFormat = "YYYY-MM-DD"
+          var convertedDate = moment(eventDate, dateFormat)
+          console.log(convertedDate.format("MMM Do YYYY"));
 
-        // use moment JS to reformat event data
-        var eventDate = games[g].dateEvent
-        var dateFormat = "YYYY-MM-DD"
-        var convertedDate = moment(eventDate, dateFormat)
-        console.log(convertedDate.format("MMM Do YYYY"));
-        // TODO show event data with game
+          // Make an option
+          var option = $("<option>");
+          option.addClass("event");
+          // show event data with game
+          option.text(games[g].strEvent + " on " + convertedDate.format("MMM Do YYYY"));
+
+          // Show schedule in first column
+          $("#game").append(option);
+          
+
+
+          
+
+          // Get home team id
+          console.log("Home team id: ", games[g].idHomeTeam)
+
+          gameDates.push({vs:games[g].strEvent, date:convertedDate, homeTeam:games[g].idHomeTeam})
+          console.log(gameDates)
         }
       })
     }
   }
 })
 
+// TODO Show list of flights for game time period in second column
+// TODO User chooses flight
+// TODO User enters their airport code
+// TODO Pull flights from user to game
 
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
 // TODO get strStadiumLocation 
@@ -290,8 +309,6 @@ $("#team").change(function chooseGame() {
 
 
 
-// TODO User enters their airport code
-// TODO Pull flights from user to game
 
 $.ajax({
   url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
@@ -342,4 +359,8 @@ $.ajax({
 
 // TODO Pull hotel info in game city for time period
 
-// TODO Show hotel info in third column
+// TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
+// TODO get strStadiumLocation 
+// TODO show staium location
+
+
