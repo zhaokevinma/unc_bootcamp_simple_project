@@ -3,17 +3,19 @@ var id;
 var team;
 var teamID;
 var data = [];
-var gameDates = [];
+var apiData = {
+  eventDate: "",
+  flightDate: "",
+  hotelArriveDate: "",
+  hotelDepartDate: "",
+};
 
 // FUNCTIONS ====================================
 
-$("document").ready(function () {
-
-
-// User chooses leauge and team
-$("#league").change(function chooseTeam() {
+// When user chooses league, show teams
+function chooseLeague() {
   var league = $(this);
-  console.log("league: ", league.val());
+  // console.log("league: ", league.val());
 
   // If user chooses NBA
   switch (league.val()) {
@@ -26,7 +28,7 @@ $("#league").change(function chooseTeam() {
         url: sportsURL,
         method: "GET"
       }).then(function(response) {
-        console.log(response);
+        // console.log(response);
         // Empty the team dropdown
         $("#team").empty();
         // Empty data array
@@ -57,7 +59,7 @@ $("#league").change(function chooseTeam() {
         url: sportsURL,
         method: "GET"
       }).then(function(response) {
-        console.log(response);
+        // console.log(response);
         // Empty the team dropdown
         $("#team").empty();
         // Empty data array
@@ -87,7 +89,7 @@ $("#league").change(function chooseTeam() {
         url: sportsURL,
         method: "GET"
       }).then(function(response) {
-        console.log(response);
+        // console.log(response);
         // Empty the team dropdown
         $("#team").empty();
         // Empty data array
@@ -107,26 +109,25 @@ $("#league").change(function chooseTeam() {
       })
       break;
   }
-}); //Close chooseTeam function
+}; //Close chooseLeague function
 
-// User chooses game
-$("#team").change(function chooseGame() {
-  console.log("Data: ", data);
+// When user chooses team, show events
+function chooseTeam() {
   var teamChoosen = $(this)
-  console.log("Team: ", teamChoosen.val());
+  // console.log("Team: ", teamChoosen.val());
 
   for (d=0; d < data.length; d++){
     if (data[d].team === teamChoosen.val()) {
-      console.log(data[d].teamID)
+      // console.log(data[d].teamID)
 
       // Pull team schedule
       var gamesURL = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=" + data[d].teamID;
-      console.log('Games', gamesURL);
+      // console.log('Games', gamesURL);
       $.ajax({
         url: gamesURL,
         method: "GET"
       }).then(function(response) {
-        console.log(response);
+        // console.log(response);
 
         // Empty games dropdown
         $("#game").empty();
@@ -136,35 +137,80 @@ $("#team").change(function chooseGame() {
         // For each response of the AJAX, show the team name in the dropdown
         for (var g = 0; g < games.length; g++){
           // Get events
-          console.log("Event: ", games[g].strEvent)
+          // console.log("Event: ", games[g].strEvent)
           
           // use moment JS to reformat event data
           var eventDate = games[g].dateEvent
           var dateFormat = "YYYY-MM-DD"
-          var convertedDate = moment(eventDate, dateFormat)
-          console.log(convertedDate.format("MMM Do YYYY"));
+          var eventDate = moment(eventDate, dateFormat)
 
           // Make an option
           var option = $("<option>");
-          option.addClass("event");
+          option.attr("id", "event");
+          option.attr("data-day", eventDate.format("YYYY-MM-DD"));
+          option.attr("data-homeId", games[g].idHomeTeam)
           // show event data with game
-          option.text(games[g].strEvent + " on " + convertedDate.format("MMM Do YYYY"));
+          option.text(games[g].strEvent + " on " + eventDate.format("MMM Do YYYY"));
 
           // Show schedule in first column
           $("#game").append(option);
           
           // Get home team id
-          console.log("Home team id: ", games[g].idHomeTeam)
-
-          gameDates.push({vs:games[g].strEvent, date:convertedDate, homeTeam:games[g].idHomeTeam})
-          console.log(gameDates)
+          // console.log("Home team id: ", games[g].idHomeTeam)
         }
       })
     }
   }
-}); //Close chooseGame function
+}; //Close chooseTeam function
 
+// When user chooses event, push event date
+function pushEventDate () {
+  var gameDate = this.options[this.selectedIndex].getAttribute("data-day")
+  apiData.eventDate = gameDate
+  apiData.flightDate = gameDate //  Default to arrive day of event
+  apiData.hotelArriveDate = gameDate // Default to check in day of event
+  apiData.hotelDepartDate = moment(gameDate, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD"); // Default to leave hotel day after event
+  console.log("apiData: ", apiData)
+}; //Close pushEventDate function
 
+// When user inputs days before event, get new flight out date
+function pushFlightDate () {
+  // Number of days before
+  var daysBefore = $(this).val();
+  // Event date
+  var eventDate = apiData.eventDate
+  // Event date format
+  var eventFormat = "YYYY-MM-DD"
+  // Event date and format into moment
+  var convertDate = moment(eventDate, eventFormat)
+  // Subtract number of days from event date
+  var flightDate = convertDate.subtract(daysBefore, "days");
+  // Put new flight out date in apiData object
+  apiData.flightDate = flightDate.format("YYYY-MM-DD");
+  // Put new hotel arrival date in apiData object
+  apiData.hotelArriveDate = flightDate.format("YYYY-MM-DD"); 
+  // Find new flights with new date
+  findFlight();
+  // Find new hotels with new date
+  findHotel();
+}; //Close pushFlightDate function
+
+function pushHotelDate () {
+  // Number of days to stay
+  var daysToStay = $(this).val();
+  // Flight date
+  var arrivalDate = apiData.hotelArriveDate
+  // Flight date format
+  var dateFormat = "YYYY-MM-DD"
+  // Flight date and format into moment
+  var convertDate = moment(arrivalDate, dateFormat)
+  // Add days to stay to arrival date
+  var departDate = convertDate.add(daysToStay, "days")
+  // Put new hotel departure date in apiData object
+  apiData.hotelDepartDate = departDate.format("YYYY-MM-DD")
+  // Find new hotels with new date
+  findHotel();
+}; //Close pushHotelDate function
 
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
 // TODO get strStadiumLocation 
@@ -175,7 +221,8 @@ $("#team").change(function chooseGame() {
 // TODO User enters their airport code
 // TODO Pull flights from user to game
 
-$("#game").change(function findFlight() {
+function findFlight() {
+  console.log("Finding Flights")
   $.ajax({
     url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
     method: 'POST',
@@ -185,7 +232,7 @@ $("#game").change(function findFlight() {
       locale: 'en-US',
       originPlace: 'SFO-sky',
       destinationPlace: 'LHR-sky',
-      outboundDate: '2019-09-01', //outbound date here
+      outboundDate: apiData.flightDate, //outbound date here
       adults: 1
     },
     headers: {
@@ -193,8 +240,8 @@ $("#game").change(function findFlight() {
       'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
       'content-type': 'application/x-www-form-urlencoded'
     }
-  })
-    .done(function(response, textStatus, jqXHR) {
+  }).done(function(response, textStatus, jqXHR) {
+    console.log(response)
     var location = jqXHR.getResponseHeader('Location');
     var array = location.split('/');
     var sessionKey = array[array.length - 1];
@@ -222,16 +269,17 @@ $("#game").change(function findFlight() {
     .fail(function() {
     console.error('error');
   }); 
-}); //Close findFlight function
+}; //Close findFlight function
 
 
 // TODO Pull hotel info in game city for time period
-$("#game").change(function findHotel() {
+function findHotel() {
+  console.log("Finding Hotels")
   $.ajax({
   url: "https://apidojo-booking-v1.p.rapidapi.com/properties/list",
   data: {
-    departure_date: "2019-09-08",
-    arrival_date: "2019-09-01",
+    departure_date: apiData.hotelDepartDate,
+    arrival_date: apiData.hotelArriveDate,
     latitude: "42.3601",
     longitude: "-71.0589",
     search_type: "latlong"
@@ -258,6 +306,16 @@ $("#game").change(function findHotel() {
       console.error("error");
     });
   });
-}); //Close findHotel function
+}; //Close findHotel function
 
-}); //Close Doc Ready Function
+
+// CALL ========================================================
+$("document").ready(function () {
+  $("#league").change(chooseLeague);
+  $("#team").change(chooseTeam);
+  $("#game").change(pushEventDate);
+  $("#flight").change(pushFlightDate);
+  $("#stay").change(pushHotelDate);
+  $("#airport").change(findFlight);
+  $("#game").change(findHotel);
+}); //Close document ready function
