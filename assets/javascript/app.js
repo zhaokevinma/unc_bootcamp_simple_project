@@ -294,46 +294,101 @@ $("#team").change(function chooseGame() {
 // TODO Pull flights from user to game
 
 $.ajax({
-  url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
-  data: {
-    sessionkey: "b241ccd2-4075-404d-be39-be3af4d215e1",
-    // country: "US",
-    // currency: "USD", 
-    // locale: "en-US", 
-    // originPlace: "SFO-sky", 
-    // adults: "1"
+	url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
+	method: 'POST',
+	data: {
+		country: 'US',
+		currency: 'USD',
+		locale: 'en-US',
+		originPlace: 'SFO-sky',
+		destinationPlace: 'LHR-sky',
+		outboundDate: '2019-09-01',
+		adults: 1
+	},
+	headers: {
+		'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+		'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
+		'content-type': 'application/x-www-form-urlencoded'
+	}
+})
+	.done(function(response, textStatus, jqXHR) {
+	var location = jqXHR.getResponseHeader('Location');
+	var array = location.split('/');
+	var sessionKey = array[array.length - 1];
+	$.ajax({
+		url:
+		'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
+		sessionKey,
+		// Example with optional parameters
+		data: {
+			pageIndex: 0,
+			pageSize: 10
+		},
+		headers: {
+			'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+			'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+		}
+	})
+		.done(function(response) {
+		console.log(response);
+	})
+		.fail(function() {
+		console.error('error');
+	});
+})
+	.fail(function() {
+	console.error('error');
+}); 
 
-  },
-  headers: {
-    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-    "x-rapidapi-key": "39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35s"
-  }
-}).done(function(response) {
-  console.log(response); 
-  $.ajax({
-    url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
 
-    headers: {
-      "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-      "x-rapidapi-key": "39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35"
-    }, 
-    data: {
-      country: "US",
-      currency: "USD", 
-      locale: "en-US", 
-      originPlace: "SFO-sky", 
-      adults: "1"
-    }
-  })
-    .done(function(response) {
-      console.log(response);
-    })
 
-    .fail(function() {
-      console.error("error");
-    });
+// $.ajax({
+// 	url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
+// 	method: 'POST',
+// 	data: {
+// 		country: 'US',
+// 		currency: 'USD',
+// 		locale: 'en-US',
+// 		originPlace: 'SFO-sky',
+// 		destinationPlace: 'LHR-sky',
+// 		outboundDate: '2019-09-01',
+// 		adults: 1
+// 	},
+// 	headers: {
+// 		'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+// 		'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
+// 		'content-type': 'application/x-www-form-urlencoded'
+// 	}
+// })
+// 	.done(function(response, textStatus, jqXHR) {
+// 	var location = jqXHR.getResponseHeader('Location');
+// 	var array = location.split('/');
+// 	var sessionKey = array[array.length - 1];
+//   console.log(sessionKey);
+//   $.ajax({
+//     url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
 
-  }); 
+//     data: {
+//       sessionKey: sessionKey
+//     },
+
+//     headers: {
+//       "x-rapidapi-host": 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+//       "x-rapidapi-key": '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35', 
+//     }
+//   })
+//     .done(function(response) {
+//       console.log(response);
+//     })
+  
+// })
+// 	.fail(function() {
+// 	console.error('error');
+// });
+
+
+
+
 
 // TODO Show list of flights for game time period in second column
 // TODO User chooses flight
