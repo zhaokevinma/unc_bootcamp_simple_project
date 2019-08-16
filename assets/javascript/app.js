@@ -8,6 +8,9 @@ var apiData = {
   flightDate: "",
   hotelArriveDate: "",
   hotelDepartDate: "",
+  eventCity: "",
+  departAirport: "",
+  arriveAirport: "",
 };
 
 // FUNCTIONS ====================================
@@ -159,7 +162,7 @@ function chooseTeam() {
             var option = $("<option>");
             option.attr("id", "event");
             option.attr("data-day", eventDate.format("YYYY-MM-DD"));
-            option.attr("data-homeId", games[g].idHomeTeam)
+            option.attr("data-homeid", games[g].idHomeTeam)
             // show event data with game
             option.text(games[g].strEvent + " on " + eventDate.format("MMM Do YYYY"));
 
@@ -184,6 +187,33 @@ function pushEventDate () {
   apiData.hotelDepartDate = moment(gameDate, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD"); // Default to leave hotel day after event
   console.log("apiData: ", apiData)
 }; //Close pushEventDate function
+
+function pushCityData () {
+  var homeTeam = this.options[this.selectedIndex].getAttribute("data-homeid");
+  var teamURL = 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id=' + homeTeam;
+
+  $.ajax({
+    url: teamURL,
+    method: "GET"
+  }).then(function(response) {
+    // console.log(response);
+
+    var city = response.teams[0];
+    // Get strStadiumLocation 
+    var stadium = city.strStadiumLocation
+    // Push stadium location
+    apiData.eventCity = stadium
+  })
+
+  // TODO find api to convert city to airport code
+}
+
+// When user inputs their airport code, send to apiData
+function pushAirportDepartCode () {
+  var code = $(this).val().trim();
+  apiData.departAirport = code + "-sky";
+  console.log(apiData)
+}
 
 // When user inputs days before event, get new flight out date
 function pushFlightDate () {
@@ -224,9 +254,7 @@ function pushHotelDate () {
   findHotel();
 }; //Close pushHotelDate function
 
-// TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
-// TODO get strStadiumLocation 
-// TODO show stadium location
+
 
 // TODO Show list of flights for game time period in second column
 // TODO User chooses flight
@@ -242,7 +270,7 @@ function findFlight() {
       country: 'US',
       currency: 'USD',
       locale: 'en-US',
-      originPlace: 'SFO-sky',
+      originPlace: apiData.departAirport,
       destinationPlace: 'LHR-sky',
       outboundDate: apiData.flightDate, //outbound date here
       adults: 1
@@ -326,8 +354,9 @@ $("document").ready(function () {
   $("#league").change(chooseLeague);
   $("#team").change(chooseTeam);
   $("#game").change(pushEventDate);
+  $("#game").change(pushCityData);
+  $("#airport").change(pushAirportDepartCode);
   $("#flight").change(pushFlightDate);
   $("#stay").change(pushHotelDate);
-  $("#airport").change(findFlight);
   $("#game").change(findHotel);
 }); //Close document ready function
