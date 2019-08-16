@@ -153,10 +153,6 @@ $("#team").change(function chooseGame() {
           // Show schedule in first column
           $("#game").append(option);
           
-
-
-          
-
           // Get home team id
           console.log("Home team id: ", games[g].idHomeTeam)
 
@@ -173,44 +169,9 @@ $("#team").change(function chooseGame() {
 // TODO User enters their airport code
 // TODO Pull flights from user to game
 
-// TODO Pull hotel info in game city for time period
-$("#game").change(function showHotels(){
-// TODO Show hotel info in third column
-  $.ajax({
-    url: "https://apidojo-booking-v1.p.rapidapi.com/properties/list",
-    data: {
-      departure_date: "2019-09-08",
-      arrival_date: "2019-09-01",
-      latitude: "42.3601",
-      longitude: "-71.0589",
-      search_type: "latlong"
-    },
-    headers: {
-      "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
-      "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
-    }
-  }).done(function(response) {
-    console.log(response);
-    $.ajax({
-      url: "https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete",
-
-      headers: {
-        "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
-        "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
-      }
-    })
-      .done(function(response) {
-        console.log(response);
-      })
-
-      .fail(function() {
-        console.error("error");
-      });
-  });
-})
-})
-
-
+// TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
+// TODO get strStadiumLocation 
+// TODO show staium location
 
 
 
@@ -224,7 +185,7 @@ $.ajax({
 		locale: 'en-US',
 		originPlace: 'SFO-sky',
 		destinationPlace: 'LHR-sky',
-		outboundDate: '2019-09-01',
+		outboundDate: '2019-09-01', //outbound date here
 		adults: 1
 	},
 	headers: {
@@ -278,5 +239,4 @@ $.ajax({
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
 // TODO get strStadiumLocation 
 // TODO show staium location
-
-// Read Me
+});
