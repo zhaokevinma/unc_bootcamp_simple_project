@@ -173,7 +173,6 @@ $("#team").change(function chooseGame() {
 // TODO User enters their airport code
 // TODO Pull flights from user to game
 
-
 // TODO Pull hotel info in game city for time period
 $("#game").change(function showHotels(){
 // TODO Show hotel info in third column
@@ -215,6 +214,65 @@ $("#game").change(function showHotels(){
 
 
 
+
+$.ajax({
+	url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
+	method: 'POST',
+	data: {
+		country: 'US',
+		currency: 'USD',
+		locale: 'en-US',
+		originPlace: 'SFO-sky',
+		destinationPlace: 'LHR-sky',
+		outboundDate: '2019-09-01',
+		adults: 1
+	},
+	headers: {
+		'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+		'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
+		'content-type': 'application/x-www-form-urlencoded'
+	}
+})
+	.done(function(response, textStatus, jqXHR) {
+	var location = jqXHR.getResponseHeader('Location');
+	var array = location.split('/');
+	var sessionKey = array[array.length - 1];
+	$.ajax({
+		url:
+		'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
+		sessionKey,
+		// Example with optional parameters
+		data: {
+			pageIndex: 0,
+			pageSize: 10
+		},
+		headers: {
+			'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+			'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+		}
+	})
+		.done(function(response) {
+		console.log(response);
+	})
+		.fail(function() {
+		console.error('error');
+	});
+})
+	.fail(function() {
+	console.error('error');
+}); 
+
+
+
+
+
+
+// TODO Show list of flights for game time period in second column
+// TODO User chooses flight
+
+
+
+// TODO Pull hotel info in game city for time period
 
 
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
