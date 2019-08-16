@@ -221,4 +221,4 @@ $("#game").change(function showHotels(){
 // TODO get strStadiumLocation 
 // TODO show staium location
 
-
+// Read Me
