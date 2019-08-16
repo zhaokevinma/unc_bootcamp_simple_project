@@ -153,10 +153,6 @@ $("#team").change(function chooseGame() {
           // Show schedule in first column
           $("#game").append(option);
           
-
-
-          
-
           // Get home team id
           console.log("Home team id: ", games[g].idHomeTeam)
 
@@ -189,7 +185,7 @@ $.ajax({
 		locale: 'en-US',
 		originPlace: 'SFO-sky',
 		destinationPlace: 'LHR-sky',
-		outboundDate: '2019-09-01',
+		outboundDate: '2019-09-01', //outbound date here
 		adults: 1
 	},
 	headers: {
@@ -243,9 +239,4 @@ $.ajax({
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
 // TODO get strStadiumLocation 
 // TODO show staium location
-<<<<<<< HEAD
 });
-=======
-
-// Read Me
->>>>>>> 200590102d26d1895958268abffdaf4d7df13f18
