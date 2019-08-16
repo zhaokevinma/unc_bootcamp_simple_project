@@ -13,9 +13,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <!-- Font awesome icon -->
+    <script src="https://kit.fontawesome.com/1fb32f5537.js"></script>
     <!-- Moment.js -->
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-
   </head>
 
   <body>
@@ -121,6 +122,9 @@
                 <label for="flight">On what day would you want to arrive?</label>
                 <input type="text" id="flight" size="1" placeholder="2">
                 <label for="daysBeforeGame">days before the game.</label>
+
+                <label for="airport">What is your departing airport code?</label>
+                <input type="text" id="airport" size="3" placeholder="RDU">
               </div>
             </form>
             </div>
@@ -137,6 +141,9 @@
                 <select class="form-control" id="hotel">
                   <option>Hotels</option>
                 </select>
+              </div>
+              <div>
+                <button class="btn btn-info btn-lg" id="result">Here is what we found!<i class="fas fa-arrow-circle-right"></i></button>
               </div>
             </form>
             </div>
