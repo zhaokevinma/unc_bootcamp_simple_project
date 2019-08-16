@@ -243,4 +243,9 @@ $.ajax({
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
 // TODO get strStadiumLocation 
 // TODO show staium location
+<<<<<<< HEAD
 });
+=======
+
+// Read Me
+>>>>>>> 200590102d26d1895958268abffdaf4d7df13f18
