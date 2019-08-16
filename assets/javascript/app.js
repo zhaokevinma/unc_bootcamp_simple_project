@@ -3,6 +3,7 @@ var id;
 var team;
 var teamID;
 var data = [];
+var gameDates = [];
 
 // FUNCTIONS ====================================
 
@@ -127,29 +128,40 @@ $("#team").change(function chooseGame() {
       }).then(function(response) {
         console.log(response);
 
-        // TODO Empty games dropdown
-        //! $("#games").empty();
+        // Empty games dropdown
+        $("#game").empty();
 
         var games = response.events
 
         // For each response of the AJAX, show the team name in the dropdown
         for (var g = 0; g < games.length; g++){
-        console.log("Event: ", games[g].strEvent)
-        
-        // Get home team id
-        console.log("Home team id: ", games[g].idHomeTeam)
-        // var option = $("<option>");
-        // option.addClass("event");
-        // option.text(games[g].strEvent);
-        // TODO Show schedule in first column
-        //! $("#games").append(option);
+          // Get events
+          console.log("Event: ", games[g].strEvent)
+          
+          // use moment JS to reformat event data
+          var eventDate = games[g].dateEvent
+          var dateFormat = "YYYY-MM-DD"
+          var convertedDate = moment(eventDate, dateFormat)
+          console.log(convertedDate.format("MMM Do YYYY"));
 
-        // use moment JS to reformat event data
-        var eventDate = games[g].dateEvent
-        var dateFormat = "YYYY-MM-DD"
-        var convertedDate = moment(eventDate, dateFormat)
-        console.log(convertedDate.format("MMM Do YYYY"));
-        // TODO show event data with game
+          // Make an option
+          var option = $("<option>");
+          option.addClass("event");
+          // show event data with game
+          option.text(games[g].strEvent + " on " + convertedDate.format("MMM Do YYYY"));
+
+          // Show schedule in first column
+          $("#game").append(option);
+          
+
+
+          
+
+          // Get home team id
+          console.log("Home team id: ", games[g].idHomeTeam)
+
+          gameDates.push({vs:games[g].strEvent, date:convertedDate, homeTeam:games[g].idHomeTeam})
+          console.log(gameDates)
         }
       })
     }
@@ -158,10 +170,13 @@ $("#team").change(function chooseGame() {
 
 // TODO Show list of flights for game time period in second column
 // TODO User chooses flight
-$("#game").change(function showFlights(){
-  // TODO User enters their airport code
+// TODO User enters their airport code
+// TODO Pull flights from user to game
 
-  // TODO Pull flights from user to game
+
+// TODO Pull hotel info in game city for time period
+$("#game").change(function showHotels(){
+// TODO Show hotel info in third column
   $.ajax({
     url: "https://apidojo-booking-v1.p.rapidapi.com/properties/list",
     data: {
@@ -206,6 +221,4 @@ $("#game").change(function showFlights(){
 // TODO get strStadiumLocation 
 // TODO show staium location
 
-// TODO Pull hotel info in game city for time period
 
-// TODO Show hotel info in third column
