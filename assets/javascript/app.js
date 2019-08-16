@@ -133,30 +133,42 @@ function chooseTeam() {
         $("#game").empty();
 
         var games = response.events
-
-        // For each response of the AJAX, show the team name in the dropdown
-        for (var g = 0; g < games.length; g++){
-          // Get events
-          // console.log("Event: ", games[g].strEvent)
-          
-          // use moment JS to reformat event data
-          var eventDate = games[g].dateEvent
-          var dateFormat = "YYYY-MM-DD"
-          var eventDate = moment(eventDate, dateFormat)
-
-          // Make an option
+        // console.log("Games ", games)
+        
+        // If there are no games
+        if (games == null) {
+          console.log("No events");
           var option = $("<option>");
-          option.attr("id", "event");
-          option.attr("data-day", eventDate.format("YYYY-MM-DD"));
-          option.attr("data-homeId", games[g].idHomeTeam)
-          // show event data with game
-          option.text(games[g].strEvent + " on " + eventDate.format("MMM Do YYYY"));
-
-          // Show schedule in first column
+          option.attr("id", "noEvent");
+          option.text("No Upcoming Events")
           $("#game").append(option);
-          
-          // Get home team id
-          // console.log("Home team id: ", games[g].idHomeTeam)
+        }
+        // If there are games
+        else {
+          // For each response of the AJAX, show the team name in the dropdown
+          for (var g = 0; g < games.length; g++){
+            // Get events
+            // console.log("Event: ", games[g].strEvent)
+            
+            // use moment JS to reformat event data
+            var eventDate = games[g].dateEvent
+            var dateFormat = "YYYY-MM-DD"
+            var eventDate = moment(eventDate, dateFormat)
+
+            // Make an option
+            var option = $("<option>");
+            option.attr("id", "event");
+            option.attr("data-day", eventDate.format("YYYY-MM-DD"));
+            option.attr("data-homeId", games[g].idHomeTeam)
+            // show event data with game
+            option.text(games[g].strEvent + " on " + eventDate.format("MMM Do YYYY"));
+
+            // Show schedule in first column
+            $("#game").append(option);
+            
+            // Get home team id
+            // console.log("Home team id: ", games[g].idHomeTeam)
+          }
         }
       })
     }
