@@ -109,136 +109,6 @@ $("#league").change(function chooseTeam() {
   }
 })
 
-<<<<<<< HEAD
-
-    switch (league.val()) {
-      case "NBA":
-        var id = 4387;
-        var sportsURL =
-          "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" +
-          id;
-        console.log("NBA", sportsURL);
-
-        $.ajax({
-          url: sportsURL,
-          method: "GET"
-        }).then(function(response) {
-          console.log(response);
-
-          $("#team").empty();
-
-          var team = response.teams;
-
-          for (var t = 0; t < team.length; t++) {
-            console.log(team[t].strTeam);
-            var option = $("<option>");
-            option.addClass("nbaTeam");
-            option.text(team[t].strTeam);
-            $("#team").append(option);
-          }
-        });
-        break;
-
-      case "WNBA":
-        var id = 4516;
-        var sportsURL =
-          "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" +
-          id;
-        console.log("WNBA", sportsURL);
-
-        $.ajax({
-          url: sportsURL,
-          method: "GET"
-        }).then(function(response) {
-          console.log(response);
-
-          $("#team").empty();
-
-          var team = response.teams;
-
-          for (var t = 0; t < team.length; t++) {
-            console.log(team[t].strTeam);
-            var option = $("<option>");
-            option.addClass("wnbaTeam");
-            option.text(team[t].strTeam);
-            $("#team").append(option);
-          }
-        });
-        break;
-
-      case "NFL":
-        var id = 4391;
-        var sportsURL =
-          "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" +
-          id;
-        console.log("NFL", sportsURL);
-        $.ajax({
-          url: sportsURL,
-          method: "GET"
-        }).then(function(response) {
-          console.log(response);
-
-          $("#team").empty();
-
-          var team = response.teams;
-
-          for (var t = 0; t < team.length; t++) {
-            console.log(team[t].strTeam);
-            var option = $("<option>");
-            option.addClass("nflTeam");
-            option.text(team[t].strTeam);
-            $("#team").append(option);
-          }
-        });
-        break;
-    }
-  });
-
-  // TODO Pull team schedule
-  // TODO Show schedule in first column
-  // TODO User chooses game
-  // TODO User enters their airport code
-  // TODO Pull flights from user to game
-  // TODO Show list of flights for game time period in second column
-  // TODO User chooses flight
-  // TODO Pull hotel info in game city for time period
-// });
-
-$.ajax({
-  url: "https://apidojo-booking-v1.p.rapidapi.com/properties/list",
-  data: {
-    departure_date: "2019-09-08",
-    arrival_date: "2019-09-01",
-    latitude: "42.3601",
-    longitude: "-71.0589",
-    search_type: "latlong"
-  },
-  headers: {
-    "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
-    "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
-  }
-}).done(function(response) {
-  console.log(response);
-  $.ajax({
-    url: "https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete",
-
-    headers: {
-      "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
-      "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
-    }
-  })
-    .done(function(response) {
-      console.log(response);
-    })
-
-    .fail(function() {
-      console.error("error");
-    });
-});
-
-
-=======
->>>>>>> 1aff3aa6bad2ba5d706c1a7b253f87d4e10119a6
 // User chooses game
 $("#team").change(function chooseGame() {
   console.log("Data: ", data);
@@ -311,46 +181,56 @@ $("#team").change(function chooseGame() {
 
 
 $.ajax({
-  url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
-  data: {
-    sessionkey: "b241ccd2-4075-404d-be39-be3af4d215e1",
-    // country: "US",
-    // currency: "USD", 
-    // locale: "en-US", 
-    // originPlace: "SFO-sky", 
-    // adults: "1"
+	url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
+	method: 'POST',
+	data: {
+		country: 'US',
+		currency: 'USD',
+		locale: 'en-US',
+		originPlace: 'SFO-sky',
+		destinationPlace: 'LHR-sky',
+		outboundDate: '2019-09-01',
+		adults: 1
+	},
+	headers: {
+		'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+		'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
+		'content-type': 'application/x-www-form-urlencoded'
+	}
+})
+	.done(function(response, textStatus, jqXHR) {
+	var location = jqXHR.getResponseHeader('Location');
+	var array = location.split('/');
+	var sessionKey = array[array.length - 1];
+	$.ajax({
+		url:
+		'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
+		sessionKey,
+		// Example with optional parameters
+		data: {
+			pageIndex: 0,
+			pageSize: 10
+		},
+		headers: {
+			'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+			'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+		}
+	})
+		.done(function(response) {
+		console.log(response);
+	})
+		.fail(function() {
+		console.error('error');
+	});
+})
+	.fail(function() {
+	console.error('error');
+}); 
 
-  },
-  headers: {
-    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-    "x-rapidapi-key": "39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35s"
-  }
-}).done(function(response) {
-  console.log(response); 
-  $.ajax({
-    url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
 
-    headers: {
-      "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-      "x-rapidapi-key": "39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35"
-    }, 
-    data: {
-      country: "US",
-      currency: "USD", 
-      locale: "en-US", 
-      originPlace: "SFO-sky", 
-      adults: "1"
-    }
-  })
-    .done(function(response) {
-      console.log(response);
-    })
 
-    .fail(function() {
-      console.error("error");
-    });
 
-  }); 
+
 
 // TODO Show list of flights for game time period in second column
 // TODO User chooses flight
@@ -359,8 +239,8 @@ $.ajax({
 
 // TODO Pull hotel info in game city for time period
 
+
 // TODO plug id into 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id='
 // TODO get strStadiumLocation 
 // TODO show staium location
-
-
+});

@@ -3,17 +3,53 @@
     font-size: 36px;
     text-align: center;
     background-color:#cceaf7;
-    height: 100vh;
+    min-height: 100vh;
     border-radius: 0;
     overflow: hidden;
     margin-bottom: 0;
 }
 
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .jumbotron {
+        font-size: 18px;
+    }
+
+    .jumbotron h1 {
+        font-size: 32px;
+    }
+
+    .jumbotron img {
+        max-width: 500px;
+        max-height: 500px;
+    }
+}
+
+.container {
+    min-height: 100vh;
+}
+
 .vision {
-    height: 100vh;
     overflow: hidden;
     font-family: 'Indie Flower', cursive;
-    background-color: blanchedalmond;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+.visionImg {
+    display: block;
+    margin: 5px auto;
+    height: 350px;
+    width: 400px;
+}
+
+.stepsPanel {
+    text-align: center;
+    font-size: 64px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .card {
@@ -25,22 +61,7 @@
     height: 240px;
 }
 
-.visionImg {
-    display: block;
-    margin: 5px auto;
-    height: 350px;
-    width: 400px;
+#result {
+    font-size: 36px;
 }
 
-.wrapper {
-    height: 100vh;
-    overflow: hidden;
-    background-color: white;
-}
-
-.stepsPanel {
-    text-align: center;
-    font-size: 64px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
