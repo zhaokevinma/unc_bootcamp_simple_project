@@ -1,8 +1,9 @@
 .jumbotron {
     font-family: 'Roboto', sans-serif;
     font-size: 36px;
+    color: aliceblue;
     text-align: center;
-    background-color:#cceaf7;
+    background-color: #256fff;
     min-height: 100vh;
     border-radius: 0;
     overflow: hidden;
