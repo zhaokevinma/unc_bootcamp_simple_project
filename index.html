@@ -110,11 +110,12 @@
               <h5 class="card-title">Step 2 - Pick your flight!</h5>
               <div class="form-group">
                 <label for="flight">On what day would you want to arrive?</label>
-                <input type="number" id="flight" size="1" placeholder="2">
+                <br>
+                <input type="number" id="flight" style="width: 30px" placeholder="2">
                 <label for="daysBeforeGame">day(s) before the game.</label>
 
                 <label for="airport">What is your departing airport code?</label>
-                <input type="text" id="airport" size="3" placeholder="RDU">
+                <input type="text" id="airport" style="width: 40px" placeholder="RDU">
               </div>
             </form>
             </div>
@@ -133,11 +134,36 @@
                 </select>
 
                 <label for="stay">How long would you like to stay in the city?</label>
-                <input type="number" id="stay" size="3" placeholder="1">
+                <input type="number" id="stay" style="width: 30px" placeholder="1">
                 <label for="stay">day(s).</label>
               </div>
               <div>
-                <button class="btn btn-info btn-lg" id="result">Here is what we found!<i class="fas fa-arrow-circle-right"></i></button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#exampleModal">
+                  Here is what we found!
+                  <i class="fas fa-arrow-circle-right"></i>
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Oops</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Make sure you made necessary selections!
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </form>
             </div>
@@ -149,6 +175,10 @@
     <!-- Scripts -->
     <!-- jQuery -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <!-- required by bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- Core Firebase -->
     <script src='https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js'></script>
     <!-- Firebase Database -->
