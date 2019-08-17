@@ -188,6 +188,8 @@ function chooseTeam() {
   }
 } //Close chooseTeam function
 
+
+
 // When user chooses event, push event date
 function pushEventDate(elem) {
   var gameDate = elem.options[elem.selectedIndex].getAttribute("data-day");
@@ -322,37 +324,74 @@ function findFlight() {
         'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
         'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
         'content-type': 'application/x-www-form-urlencoded'
-      }
-    }).done(function(response, textStatus, jqXHR) {
-      console.log(response)
-      var location = jqXHR.getResponseHeader('Location');
-      var array = location.split('/');
-      var sessionKey = array[array.length - 1];
-      $.ajax({
-        url:
-        'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
-        sessionKey,
-        // Example with optional parameters
-        data: {
-          pageIndex: 0,
-          pageSize: 10
-        },
-        headers: {
-          'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
-          'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+      }).done(function(response, textStatus, jqXHR) {
+        console.log(response)
+        var location = jqXHR.getResponseHeader('Location');
+        var array = location.split('/');
+        var sessionKey = array[array.length - 1];
+        $.ajax({
+          url:
+          'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
+          sessionKey,
+          // Example with optional parameters
+          data: {
+            pageIndex: 0,
+            pageSize: 10
+          },
+          headers: {
+            'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+            'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+          }
+        })
+          .done(function(response) {
+      console.log(response);
+      // for(var i=0; i< 3; i++){
+      //   console.log(response.Carriers[i].Name); 
+      //   console.log(response.Itineraries[i].PricingOptions[0].Price); 
+      // }
+        // Empty dropdown
+        $("#flight2").empty();
+
+        var flights = response.Carriers; 
+        
+        // If no flights
+        if (flights == null) {
+          console.log("No flights");
+          var option = $("<option>");
+          option.attr("id", "noEvent");
+          option.text("No Flights available")
+          $("#flight2").append(option);
         }
-      })
-        .done(function(response) {
-        console.log(response);
-      })
-        .fail(function() {
-        console.error('error');
-      });
+        // if there are flight options
+        else {
+          // show 3 of the AJAX calls, show flight in response
+          for(var i=0; i< 3; i++){
+          
+              // Get flights
+              console.log(price)
+      
+              // Make an option
+              var option = $("<option>");
+              option.attr("data-flight", flights[i].Name); 
+              // show event data with flight
+              option.text(flights[i].Name + " / " + response.Itineraries[i].PricingOptions[0].Price );
+
+              // Show schedule in column
+              $("#flight2").append(option);
+            
+              // Get home team id
+              // console.log("Home team id: ", games[g].idHomeTeam)
+            
+          }  
+        }
     })
       .fail(function() {
       console.error('error');
     }); 
-  }
+   })
+      .fail(function() {
+      console.error('error');
+    }); 
 }; //Close findFlight function
 
 
