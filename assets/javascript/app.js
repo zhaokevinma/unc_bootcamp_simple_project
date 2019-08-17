@@ -179,6 +179,8 @@ function chooseTeam() {
   }
 }; //Close chooseTeam function
 
+
+
 // When user chooses event, push event date
 function pushEventDate () {
   var gameDate = this.options[this.selectedIndex].getAttribute("data-day")
@@ -320,6 +322,46 @@ function findFlight() {
     })
       .done(function(response) {
       console.log(response);
+      // for(var i=0; i< 3; i++){
+      //   console.log(response.Carriers[i].Name); 
+      //   console.log(response.Itineraries[i].PricingOptions[0].Price); 
+      // }
+        // Empty dropdown
+        $("#flight2").empty();
+
+        var flights = response.Carriers; 
+        
+        // If no flights
+        if (flights == null) {
+          console.log("No flights");
+          var option = $("<option>");
+          option.attr("id", "noEvent");
+          option.text("No Flights available")
+          $("#flight2").append(option);
+        }
+        // if there are flight options
+        else {
+          // show 3 of the AJAX calls, show flight in response
+          for(var i=0; i< 3; i++){
+          
+              // Get flights
+              console.log(price)
+      
+              // Make an option
+              var option = $("<option>");
+              option.attr("data-flight", flights[i].Name); 
+              // show event data with flight
+              option.text(flights[i].Name + " / " + response.Itineraries[i].PricingOptions[0].Price );
+
+              // Show schedule in column
+              $("#flight2").append(option);
+            
+              // Get home team id
+              // console.log("Home team id: ", games[g].idHomeTeam)
+            
+          }  
+        }
+
     })
       .fail(function() {
       console.error('error');
