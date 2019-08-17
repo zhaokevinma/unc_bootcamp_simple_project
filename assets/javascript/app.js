@@ -8,6 +8,7 @@ var apiData = {
   flightDate: "",
   hotelArriveDate: "",
   hotelDepartDate: "",
+  eventLocation: "",
   eventCity: "",
   departAirport: "",
   arriveAirport: "",
@@ -202,10 +203,30 @@ function pushCityData () {
     // Get strStadiumLocation 
     var stadium = city.strStadiumLocation
     // Push stadium location
-    apiData.eventCity = stadium
+    apiData.eventLocation = stadium
+    // Split event into city and state
+    city = stadium.split(",")
+    // Push city only 
+    apiData.eventCity = city[0]
+    console.log(apiData)
+    pushAirportArriveCode()
   })
+}
 
-  // TODO find api to convert city to airport code
+// TODO find api to convert city to airport code
+function pushAirportArriveCode() {
+  for (a=0; a<airports.length; a++){
+
+    if (airports[a].city === apiData.eventCity){
+      apiData.arriveAirport = airports[a].code;
+      console.log(apiData)
+    }
+    /*
+    else {
+      console.log("Not working")
+    }
+    */
+  }
 }
 
 // When user inputs their airport code, send to apiData
@@ -213,7 +234,7 @@ function pushAirportDepartCode () {
   var code = $(this).val().trim();
   apiData.departAirport = code + "-sky";
   console.log(apiData)
-}
+}; //Close pushAirportDepartCode function
 
 // When user inputs days before event, get new flight out date
 function pushFlightDate () {
@@ -253,8 +274,6 @@ function pushHotelDate () {
   // Find new hotels with new date
   findHotel();
 }; //Close pushHotelDate function
-
-
 
 // TODO Show list of flights for game time period in second column
 // TODO User chooses flight
