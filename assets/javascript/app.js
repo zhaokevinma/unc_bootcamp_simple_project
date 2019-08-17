@@ -218,7 +218,7 @@ function pushAirportArriveCode() {
   for (a=0; a<airports.length; a++){
 
     if (airports[a].city === apiData.eventCity){
-      apiData.arriveAirport = airports[a].code;
+      apiData.arriveAirport = airports[a].code + "-sky";
       console.log(apiData)
     }
     /*
@@ -290,7 +290,7 @@ function findFlight() {
       currency: 'USD',
       locale: 'en-US',
       originPlace: apiData.departAirport,
-      destinationPlace: 'LHR-sky',
+      destinationPlace: apiData.arriveAirport,
       outboundDate: apiData.flightDate, //outbound date here
       adults: 1
     },
@@ -378,4 +378,5 @@ $("document").ready(function () {
   $("#flight").change(pushFlightDate);
   $("#stay").change(pushHotelDate);
   $("#game").change(findHotel);
+  $("#airport").change(findFlight);
 }); //Close document ready function
