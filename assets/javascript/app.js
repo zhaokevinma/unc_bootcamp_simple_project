@@ -189,6 +189,7 @@ function pushEventDate () {
   console.log("apiData: ", apiData)
 }; //Close pushEventDate function
 
+// When user chooses event, push event city
 function pushCityData () {
   var homeTeam = this.options[this.selectedIndex].getAttribute("data-homeid");
   var teamURL = 'https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id=' + homeTeam;
@@ -211,9 +212,9 @@ function pushCityData () {
     console.log(apiData)
     pushAirportArriveCode()
   })
-}
+}; //Close pushCityData function
 
-// TODO find api to convert city to airport code
+// Convert city to airport code
 function pushAirportArriveCode() {
   for (a=0; a<airports.length; a++){
 
@@ -227,13 +228,14 @@ function pushAirportArriveCode() {
     }
     */
   }
-}
+}; //Close pushAirportArriveCode function
 
-// When user inputs their airport code, send to apiData
+// When user inputs their airport code, send to apiData and run findFlight
 function pushAirportDepartCode () {
   var code = $(this).val().trim();
   apiData.departAirport = code + "-sky";
-  console.log(apiData)
+  console.log(apiData);
+  findFlight();
 }; //Close pushAirportDepartCode function
 
 // When user inputs days before event, get new flight out date
@@ -258,6 +260,7 @@ function pushFlightDate () {
   findHotel();
 }; //Close pushFlightDate function
 
+// When user inputs days to stay in city, get new hotels
 function pushHotelDate () {
   // Number of days to stay
   var daysToStay = $(this).val();
@@ -282,52 +285,60 @@ function pushHotelDate () {
 
 function findFlight() {
   console.log("Finding Flights")
-  $.ajax({
-    url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
-    method: 'POST',
-    data: {
-      country: 'US',
-      currency: 'USD',
-      locale: 'en-US',
-      originPlace: apiData.departAirport,
-      destinationPlace: apiData.arriveAirport,
-      outboundDate: apiData.flightDate, //outbound date here
-      adults: 1
-    },
-    headers: {
-      'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
-      'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
-      'content-type': 'application/x-www-form-urlencoded'
-    }
-  }).done(function(response, textStatus, jqXHR) {
-    console.log(response)
-    var location = jqXHR.getResponseHeader('Location');
-    var array = location.split('/');
-    var sessionKey = array[array.length - 1];
+  
+  if (apiData.departAirport == false) {
+    console.log("Need city");
+    $("#airport").css("border", "1px solid red")
+  }
+  else {
+    $("#airport").css("border-width", "2px").css("border-style", "inset").css("border-color", "initial")
     $.ajax({
-      url:
-      'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
-      sessionKey,
-      // Example with optional parameters
+      url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
+      method: 'POST',
       data: {
-        pageIndex: 0,
-        pageSize: 10
+        country: 'US',
+        currency: 'USD',
+        locale: 'en-US',
+        originPlace: apiData.departAirport,
+        destinationPlace: apiData.arriveAirport,
+        outboundDate: apiData.flightDate, //outbound date here
+        adults: 1
       },
       headers: {
         'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
-        'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+        'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
+        'content-type': 'application/x-www-form-urlencoded'
       }
-    })
-      .done(function(response) {
-      console.log(response);
+    }).done(function(response, textStatus, jqXHR) {
+      console.log(response)
+      var location = jqXHR.getResponseHeader('Location');
+      var array = location.split('/');
+      var sessionKey = array[array.length - 1];
+      $.ajax({
+        url:
+        'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
+        sessionKey,
+        // Example with optional parameters
+        data: {
+          pageIndex: 0,
+          pageSize: 10
+        },
+        headers: {
+          'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+          'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
+        }
+      })
+        .done(function(response) {
+        console.log(response);
+      })
+        .fail(function() {
+        console.error('error');
+      });
     })
       .fail(function() {
       console.error('error');
-    });
-  })
-    .fail(function() {
-    console.error('error');
-  }); 
+    }); 
+  }
 }; //Close findFlight function
 
 
@@ -370,13 +381,17 @@ function findHotel() {
 
 // CALL ========================================================
 $("document").ready(function () {
-  $("#league").change(chooseLeague);
-  $("#team").change(chooseTeam);
-  $("#game").change(pushEventDate);
-  $("#game").change(pushCityData);
-  $("#airport").change(pushAirportDepartCode);
-  $("#flight").change(pushFlightDate);
-  $("#stay").change(pushHotelDate);
-  $("#game").change(findHotel);
-  $("#airport").change(findFlight);
+  // User chooses a league
+  $("#league").change(chooseLeague); // Populate team data
+  // User chooses a team
+  $("#team").change(chooseTeam); // Populate Game Data
+  // User chooses a game
+  $("#game").change(pushEventDate); // Push Date to apiData
+  $("#game").change(pushCityData); // Push City to apiData
+  $("#game").change(findHotel); // Populate hotels
+  // User inputs Airport Code
+  $("#airport").change(pushAirportDepartCode); // Push airport code to apiData
+  $("#stay").change(pushHotelDate); // Populate hotels
+  // If user changes number of days
+  $("#flight").change(pushFlightDate); // Push number to apiData
 }); //Close document ready function
