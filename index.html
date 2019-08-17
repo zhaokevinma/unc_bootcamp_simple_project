@@ -95,15 +95,18 @@
                 <div class="form-group">
                   <label for="league">What league?</label>
                   <select class="form-control" id="league">
+                    <option>Choose a League</option>
                     <option>NBA</option>
                     <option>WNBA</option>
                     <option>NFL</option>
                   </select>
+                  <br>
                   
                   <label for="team">What team?</label>
                   <select class="form-control" id="team">
                     <option>Depends on league</option>
                   </select>
+                  <br>
 
                   <label for="game">Which game?</label>
                   <select class="form-control" id="game">
@@ -121,14 +124,16 @@
             <div class="card-body">
               <h5 class="card-title">Step 2 - Pick your flight!</h5>
               <div class="form-group">
+                <label for="airport">What is your departing airport code? (3 letter code)</label>
+                <br>
+                <input type="text" id="airport" style="width: 40px" placeholder="RDU">
+                <br>
+                <br>
                 <label for="flight">On what day would you want to arrive?</label>
                 <br>
                 <input type="number" id="flight" style="width: 30px" placeholder="0">
                 <label for="daysBeforeGame">day(s) before the game.</label>
-
-                <label for="airport">What is your departing airport code? (3 letter code)</label>
                 <br>
-                <input type="text" id="airport" style="width: 40px" placeholder="RDU">
                 <br>
                 <label for="game">Pick an airline</label>
                 <select class="form-control" id="flight2">
@@ -148,7 +153,7 @@
               <div class="form-group">
                 <label for="hotel">Where would you like to stay?</label>
                 <select class="form-control" id="hotel">
-                  <option>Hotels</option>
+                  <option>Depends on game</option>
                 </select>
 
                 <label for="stay">How long would you like to stay in the city?</label>
