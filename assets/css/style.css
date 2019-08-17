@@ -1,3 +1,15 @@
+.navbar {
+    background-color: #256fff;
+    position: sticky;
+    top: 0;
+    z-index: 15;
+}
+
+a {
+    color: aliceblue;
+    text-decoration: none;
+}
+
 .jumbotron {
     font-family: 'Roboto', sans-serif;
     font-size: 36px;
@@ -21,8 +33,8 @@
     }
 
     .jumbotron img {
-        max-width: 500px;
-        max-height: 500px;
+        max-width: 350px;
+        max-height: 350px;
     }
 }
 
@@ -49,7 +61,7 @@
 .stepsPanel {
     text-align: center;
     font-size: 64px;
-    margin-top: 20px;
+    margin-top: 50px;
     margin-bottom: 30px;
 }
 
@@ -73,7 +85,8 @@
     width: 100%;
     height: 200px;
     line-height: 60px;
-    background-color: lightslategrey;
+    background-color: #256fff;
+    color: white;
     text-align: center;
 }
 
@@ -82,7 +95,7 @@ ul {
 }
 
 ul a {
-    color: black;
+    color: white;
 }
 
 

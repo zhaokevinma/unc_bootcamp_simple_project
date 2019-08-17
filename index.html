@@ -2,6 +2,7 @@
 <html lang='en-US'>
   <head>
     <meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Project 1 </title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -20,14 +21,26 @@
   </head>
 
   <body>
+    <nav class="navbar-expand-lg navbar navbar-expand-md">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-basketball-ball"></i>
+      </a>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="#visionPanel">Our vision</a>
+          <a class="nav-item nav-link" href="#stepsPanel">Steps</a>
+        </div>
+      </div>
+    </nav>
     <!-- jumbotron -->
     <div class="jumbotron">
       <h1 class="display-4 animated bounceIn">Sports-Flight-Hotel All in one!</h1>
       <p class="lead">Our website helps you set up your travel at one stop!</p>
-      <img src="assets/images/jumboSport.gif" alt="An airplane">
+      <img src="assets/images/jumboSport.gif" alt="A person dribbling a ball">
     </div>
     <!-- vision -->
-    <div class="container vision">
+    <div class="container vision" id="visionPanel">
       <div class="row underlined">
           <h1>Our vision</h1>
       </div>
@@ -45,7 +58,7 @@
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-5">
-          <img src="assets/images/no.png" alt="A stressed person" class="visionImg">
+          <img src="assets/images/no.png" alt="A stressed person" class="visionImg wow tada">
         </div>
       </div>
 
@@ -58,18 +71,17 @@
           <br>
           <h3>A one-stop experience to see your favorite team!</h2>
         </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-5">
-          <img src="assets/images/yay.png" alt="A happer person" class="visionImg">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5">
+          <img src="assets/images/yay.png" alt="A happer person" class="visionImg wow tada">
         </div>
       </div>
     </div>
     <!-- steps -->
-    <div class="container">
+    <div class="container" id="stepsPanel">
       <div class="row stepsPanel">
         <div class="col-md-12">
             <p>It's easy!</p>
-
         </div>
       </div>
 

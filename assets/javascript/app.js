@@ -217,20 +217,22 @@ function pushCityData(elem) {
     // Push stadium location
     apiData.eventLocation = stadium;
     // Split event into city and state
-    city = stadium.split(",");
-    // Push city only
-    apiData.eventCity = city[0];
-    console.log(apiData);
-    pushAirportArriveCode();
-  });
-}
 
-// TODO find api to convert city to airport code
+    city = stadium.split(",")
+    // Push city only 
+    apiData.eventCity = city[0]
+    console.log(apiData)
+    pushAirportArriveCode()
+  })
+}; //Close pushCityData function
+
+// Convert city to airport code
 function pushAirportArriveCode() {
-  for (a = 0; a < airports.length; a++) {
-    if (airports[a].city === apiData.eventCity) {
-      apiData.arriveAirport = airports[a].code;
-      console.log(apiData);
+  for (a = 0; a<airports.length; a++){
+
+    if (airports[a].city === apiData.eventCity){
+      apiData.arriveAirport = airports[a].code + "-sky";
+      console.log(apiData)
     }
     /*
     else {
@@ -238,16 +240,17 @@ function pushAirportArriveCode() {
     }
     */
   }
-}
+}; //Close pushAirportArriveCode function
 
-// When user inputs their airport code, send to apiData
-function pushAirportDepartCode() {
-  var code = $(this)
-    .val()
-    .trim();
+
+// When user inputs their airport code, send to apiData and run findFlight
+function pushAirportDepartCode () {
+  var code = $(this).val().trim();
   apiData.departAirport = code + "-sky";
   console.log(apiData);
-} //Close pushAirportDepartCode function
+  findFlight();
+}; //Close pushAirportDepartCode function
+
 
 // When user inputs days before event, get new flight out date
 function pushFlightDate() {
@@ -271,7 +274,8 @@ function pushFlightDate() {
   findHotel();
 } //Close pushFlightDate function
 
-function pushHotelDate() {
+// When user inputs days to stay in city, get new hotels
+function pushHotelDate () {
   // Number of days to stay
   var daysToStay = $(this).val();
   // Flight date
@@ -294,58 +298,63 @@ function pushHotelDate() {
 // TODO Pull flights from user to game
 
 function findFlight() {
-  console.log("Finding Flights");
-  $.ajax({
-    url:
-      "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
-    method: "POST",
-    data: {
-      country: "US",
-      currency: "USD",
-      locale: "en-US",
-      originPlace: apiData.departAirport,
-      destinationPlace: "LHR-sky",
-      outboundDate: apiData.flightDate, //outbound date here
-      adults: 1
-    },
-    headers: {
-      "x-rapidapi-host":
-        "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-      "x-rapidapi-key": "39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35",
-      "content-type": "application/x-www-form-urlencoded"
-    }
-  })
-    .done(function(response, textStatus, jqXHR) {
-      console.log(response);
-      var location = jqXHR.getResponseHeader("Location");
-      var array = location.split("/");
+  console.log("Finding Flights")
+  
+  if (apiData.departAirport == false) {
+    console.log("Need city");
+    $("#airport").css("border", "1px solid red")
+  }
+  else {
+    $("#airport").css("border-width", "2px").css("border-style", "inset").css("border-color", "initial")
+    $.ajax({
+      url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
+      method: 'POST',
+      data: {
+        country: 'US',
+        currency: 'USD',
+        locale: 'en-US',
+        originPlace: apiData.departAirport,
+        destinationPlace: apiData.arriveAirport,
+        outboundDate: apiData.flightDate, //outbound date here
+        adults: 1
+      },
+      headers: {
+        'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+        'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    }).done(function(response, textStatus, jqXHR) {
+      console.log(response)
+      var location = jqXHR.getResponseHeader('Location');
+      var array = location.split('/');
       var sessionKey = array[array.length - 1];
       $.ajax({
         url:
-          "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/" +
-          sessionKey,
+        'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
+        sessionKey,
         // Example with optional parameters
         data: {
           pageIndex: 0,
           pageSize: 10
         },
         headers: {
-          "x-rapidapi-host":
-            "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-          "x-rapidapi-key": "39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35"
+          'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
+          'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
         }
       })
         .done(function(response) {
-          console.log(response);
-        })
+        console.log(response);
+      })
         .fail(function() {
-          console.error("error");
-        });
+        console.error('error');
+      });
     })
-    .fail(function() {
-      console.error("error");
-    });
-} //Close findFlight function
+      .fail(function() {
+      console.error('error');
+    }); 
+  }
+}; //Close findFlight function
+
 
 // TODO Pull hotel info in game city for time period
 function findHotel() {
@@ -397,19 +406,18 @@ function getResponses(elem) {
 } //Close findHotel function*/
 
 // CALL ========================================================
-$("document").ready(function() {
-  $("#league").change(chooseLeague);
-  $("#team").change(chooseTeam);
-  $("#game").change(function() {
-    var elem = this;
-    pushEventDate(elem);
-    getResponses(elem);
-  });
-  // $("#game").change(getResponses);
-  // $("#game").change(pushCityData);
-  $("#airport").change(pushAirportDepartCode);
-  $("#flight").change(pushFlightDate);
-  $("#stay").change(pushHotelDate);
-  // $("#game").change(findHotel);
-  // $("#game").change(bookingResults);
+$("document").ready(function () {
+  // User chooses a league
+  $("#league").change(chooseLeague); // Populate team data
+  // User chooses a team
+  $("#team").change(chooseTeam); // Populate Game Data
+  // User chooses a game
+  $("#game").change(pushEventDate); // Push Date to apiData
+  $("#game").change(pushCityData); // Push City to apiData
+  $("#game").change(findHotel); // Populate hotels
+  // User inputs Airport Code
+  $("#airport").change(pushAirportDepartCode); // Push airport code to apiData
+  $("#stay").change(pushHotelDate); // Populate hotels
+  // If user changes number of days
+  $("#flight").change(pushFlightDate); // Push number to apiData
 }); //Close document ready function
