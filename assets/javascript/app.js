@@ -3,6 +3,7 @@ var id;
 var team;
 var teamID;
 var data = [];
+
 var apiData = {
   eventDate: "",
   flightDate: "",
@@ -18,12 +19,12 @@ var modalData = {
   userGame: "", //* You choose to see _ vs _ ...
   userDate: "", //* on _ ...
   userCity: "", //* in the city of _ 
-  userFlight: "", //* You found a flight with _ ...
-  userFlightDate: "", //* on _ ...
-  userFlightPrice: "", //* for $ _
-  userHotel: "", // And you're staying with _ ...
-  userHotelDate: "", // from _ to _ ...
-  userHotelPrice: "", // for $ _
+  userFlight: "test4", //* You found a flight with _ ...
+  userFlightDate: "test5", //* on _ ...
+  userFlightPrice: "test6", //* for $ _
+  userHotel: "test", // And you're staying with _ ...
+  userHotelDate: "test2", // from _ to _ ...
+  userHotelPrice: "test3", // for $ _
 }
 
 var pickTeam = $("<option>").text("Choose a Team");
@@ -504,6 +505,19 @@ function findHotel() {
 // TODO Show selected information in modal
 // Run when user clicks submit
 function popModal() {
+  var data =  Object.values(modalData);
+
+  for (m = 0; m < data.length; m++) {
+    if (data[m] == false) {
+      $(".modal-title").text("Oops");
+      $(".modal-body").text("Make sure you made necessary selections!")
+      return m;
+    }
+    else {
+      $(".modal-title").text("Your Selections")
+      $(".modal-body").text("Yay!")
+    }
+  }
   
 }; //Close popModal function
 
