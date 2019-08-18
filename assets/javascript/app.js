@@ -14,6 +14,18 @@ var apiData = {
   arriveAirport: "",
 };
 
+var modelData = {
+  userGame: "", // You choose to see _ vs _ ...
+  userDate: "", // on _ ...
+  userCity: "", // in the city of _ 
+  userFlight: "", // You found a flight with _ ...
+  userFlightDate: "", // on _ ...
+  userFlightPrice: "", // for $ _
+  userHotel: "", // And you're staying with _ ...
+  userHotelDate: "", // from _ to _ ...
+  userHotelPrice: "", // for $ _
+}
+
 var pickTeam = $("<option>").text("Choose a Team");
 var pickGame = $("<option>").text("Choose a Game");
 var pickFlight = $("<option>").text("Choose a Flight");
@@ -458,7 +470,13 @@ function findHotel() {
   }).fail(function () {
     console.error("error");
   });
-};
+}; //Close findHotel function
+
+// TODO Show selected information in modal
+// Run when user clicks submit
+function popModal() {
+  
+}; //Close popModal function
 
 // CALL ========================================================
 $("document").ready(function () {
@@ -483,4 +501,7 @@ $("document").ready(function () {
 
   // User chooses flight
   $("#flight2").change(findHotel); // Populate flights
+
+  // User clicks submit button
+  $(".btn-info").click(popModal);
 }); //Close document ready function
