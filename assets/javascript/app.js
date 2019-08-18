@@ -19,12 +19,13 @@ var modalData = {
   userGame: "", //* You choose to see _ vs _ ...
   userDate: "", //* on _ ...
   userCity: "", //* in the city of _ 
-  userFlight: "test4", //* You found a flight with _ ...
-  userFlightDate: "test5", //* on _ ...
-  userFlightPrice: "test6", //* for $ _
-  userHotel: "test", // And you're staying with _ ...
-  userHotelDate: "test2", // from _ to _ ...
-  userHotelPrice: "test3", // for $ _
+  userFlight: "", //* You found a flight with _ ...
+  userFlightDate: "", //* on _ ...
+  userFlightPrice: "", //* for $ _
+  userHotel: "", // And you're staying with _ ...
+  userHotelArriveDate: "", // from _ ...
+  userHotelDepartDate: "", // to _ ...
+  userHotelPrice: "", // for $ _
 }
 
 var pickTeam = $("<option>").text("Choose a Team");
@@ -514,11 +515,22 @@ function popModal() {
       return m;
     }
     else {
-      $(".modal-title").text("Your Selections")
-      $(".modal-body").text("Yay!")
+      // Change the header
+      $(".modal-title").text("Your Selections");
+      // Empty the modal of the placeholder text
+      $(".modal-body").empty();
+      // Sentence for each card
+      var gameData = "You choose to see <b>" + modalData.userGame + "</b> on <b>" + modalData.userDate + "</b> in the city of <b>" + modalData.userCity + "</b>. <br/><br/>";
+      var flightData = "You found a flight with <b>" + modalData.userFlight + "</b> on <b>" + modalData.userFlightDate + "</b> for <b>$" + modalData.userFlightPrice + "</b>. <br/><br/>";
+      var hotelData = "And you're staying with <b>" + modalData.userHotel + "</b> from <b>" + modalData.userHotelArriveDate + " to " + modalData.userHotelDepartDate + "</b> for <b>$" + modalData.userHotelPrice + "</b>. <br/><br/>";
+      // Append the sentences to the modal
+      $(".modal-body").append(gameData);
+      $(".modal-body").append(flightData);
+      $(".modal-body").append(hotelData);
+      // Stop the function so it doesn't keep running of each loop through
+      return m;
     }
   }
-  
 }; //Close popModal function
 
 // CALL ========================================================
