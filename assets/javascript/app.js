@@ -385,14 +385,12 @@ function findFlight() {
             // show 3 of the AJAX calls, show flight in response
             for (var i = 0; i < 3; i++) {
               // Get prices
-              var price = response.Itineraries[i].PricingOptions[0].Price
-              console.log("Price: ", price)
               // Make an option
               var option = $("<option>");
               option.attr("data-flight", flights[i].Name);
-              option.attr("data-flightprice", price);
+              // option.attr("data-flightprice", price);
               // show event data with flight
-              option.text("Fly with " + flights[i].Name + " for $" + price);
+              option.text("Fly with " + flights[i].Name + " for $" + response.Itineraries[i].PricingOptions[0].Price);
               // Show flight in column
               $("#flight2").append(option);
             }
