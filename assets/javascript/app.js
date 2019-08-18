@@ -191,8 +191,8 @@ function chooseTeam() {
 
 
 // When user chooses event, push event date
-function pushEventDate(elem) {
-  var gameDate = elem.options[elem.selectedIndex].getAttribute("data-day");
+function pushEventDate() {
+  var gameDate = this.options[this.selectedIndex].getAttribute("data-day");
   apiData.eventDate = gameDate;
   apiData.flightDate = gameDate; //  Default to arrive day of event
   apiData.hotelArriveDate = gameDate; // Default to check in day of event
@@ -202,8 +202,8 @@ function pushEventDate(elem) {
   console.log("apiData: ", apiData);
 } //Close pushEventDate function
 
-function pushCityData(elem) {
-  var homeTeam = elem.options[elem.selectedIndex].getAttribute("data-homeid");
+function pushCityData() {
+  var homeTeam = this.options[this.selectedIndex].getAttribute("data-homeid");
   var teamURL =
     "https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id=" + homeTeam;
 
@@ -301,13 +301,14 @@ function pushHotelDate () {
 
 function findFlight() {
   console.log("Finding Flights")
-  
+
   if (apiData.departAirport == false) {
     console.log("Need city");
     $("#airport").css("border", "1px solid red")
   }
   else {
-    $("#airport").css("border-width", "2px").css("border-style", "inset").css("border-color", "initial")
+    $("#airport").css("border-width", "2px").css("border-style", "inset").css("border-color", "initial");
+
     $.ajax({
       url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0',
       method: 'POST',
@@ -324,74 +325,62 @@ function findFlight() {
         'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
         'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35',
         'content-type': 'application/x-www-form-urlencoded'
-      }).done(function(response, textStatus, jqXHR) {
+      }
+    }).done(function (response, textStatus, jqXHR) {
         console.log(response)
         var location = jqXHR.getResponseHeader('Location');
         var array = location.split('/');
         var sessionKey = array[array.length - 1];
+
         $.ajax({
-          url:
-          'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' +
-          sessionKey,
+          url: 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' + sessionKey,
           // Example with optional parameters
           data: {
             pageIndex: 0,
-            pageSize: 10
+            pageSize: 10,
           },
           headers: {
             'x-rapidapi-host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
             'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
           }
-        })
-          .done(function(response) {
-      console.log(response);
-      // for(var i=0; i< 3; i++){
-      //   console.log(response.Carriers[i].Name); 
-      //   console.log(response.Itineraries[i].PricingOptions[0].Price); 
-      // }
-        // Empty dropdown
-        $("#flight2").empty();
+        }).done(function (response) {
+          console.log(response);
+          // Empty dropdown
+          $("#flight2").empty();
 
-        var flights = response.Carriers; 
-        
-        // If no flights
-        if (flights == null) {
-          console.log("No flights");
-          var option = $("<option>");
-          option.attr("id", "noEvent");
-          option.text("No Flights available")
-          $("#flight2").append(option);
-        }
-        // if there are flight options
-        else {
-          // show 3 of the AJAX calls, show flight in response
-          for(var i=0; i< 3; i++){
-          
-              // Get flights
-              console.log(price)
-      
+          var flights = response.Carriers;
+
+          // If no flights
+          if (flights == null) {
+            console.log("No flights");
+            var option = $("<option>");
+            option.attr("id", "noEvent");
+            option.text("No Flights available");
+            $("#flight2").append(option);
+          }
+          // if there are flight options
+          else {
+            // show 3 of the AJAX calls, show flight in response
+            for (var i = 0; i < 3; i++) {
+              // Get prices
+              console.log("Price: ", response.Itineraries[i].PricingOptions[0].Price)
               // Make an option
               var option = $("<option>");
-              option.attr("data-flight", flights[i].Name); 
+              option.attr("data-flight", flights[i].Name);
               // show event data with flight
-              option.text(flights[i].Name + " / " + response.Itineraries[i].PricingOptions[0].Price );
-
-              // Show schedule in column
+              option.text(flights[i].Name + " / " + response.Itineraries[i].PricingOptions[0].Price);
+              // Show flight in column
               $("#flight2").append(option);
-            
-              // Get home team id
-              // console.log("Home team id: ", games[g].idHomeTeam)
-            
-          }  
-        }
-    })
-      .fail(function() {
-      console.error('error');
-    }); 
-   })
-      .fail(function() {
-      console.error('error');
-    }); 
+            }
+          }
+        }).fail(function () {
+          console.error('error');
+        });
+      })
+      .fail(function () {
+        console.error('error');
+      });
+  }
 }; //Close findFlight function
 
 
