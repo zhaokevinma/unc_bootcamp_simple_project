@@ -14,10 +14,10 @@ var apiData = {
   arriveAirport: "",
 };
 
-var modelData = {
-  userGame: "", // You choose to see _ vs _ ...
-  userDate: "", // on _ ...
-  userCity: "", // in the city of _ 
+var modalData = {
+  userGame: "", //* You choose to see _ vs _ ...
+  userDate: "", //* on _ ...
+  userCity: "", //* in the city of _ 
   userFlight: "", // You found a flight with _ ...
   userFlightDate: "", // on _ ...
   userFlightPrice: "", // for $ _
@@ -181,12 +181,13 @@ function chooseTeam() {
             // use moment JS to reformat event data
             var eventDate = games[g].dateEvent;
             var dateFormat = "YYYY-MM-DD";
-            var eventDate = moment(eventDate, dateFormat);
+            eventDate = moment(eventDate, dateFormat);
 
             // Make an option
             var option = $("<option>");
             option.attr("id", "event");
             option.attr("data-day", eventDate.format("YYYY-MM-DD"));
+            option.attr("data-vs", games[g].strEvent);
             option.attr("data-homeid", games[g].idHomeTeam);
             // show event data with game
             option.text(games[g].strEvent + " on " + eventDate.format("MMM Do YYYY"));
@@ -209,6 +210,10 @@ function pushEventDate() {
   apiData.flightDate = gameDate; //  Default to arrive day of event
   apiData.hotelArriveDate = gameDate; // Default to check in day of event
   apiData.hotelDepartDate = moment(gameDate, "YYYY-MM-DD").add(1, "days").format("YYYY-MM-DD"); // Default to leave hotel day after event
+
+  var gameTeams =  this.options[this.selectedIndex].getAttribute("data-vs");
+  modalData.userGame = gameTeams;
+  modalData.userDate = moment(gameDate, "YYYY-MM-DD").format("MMM Do YYYY");
 } //Close pushEventDate function
 
 // * When user chooses a event, push event city
@@ -227,14 +232,16 @@ function pushCityData() {
     var city = response.teams[0];
     // Get strStadiumLocation
     var stadium = city.strStadiumLocation;
-    // Push stadium location
+    // Push stadium location to apiData
     apiData.eventLocation = stadium;
+    // Push stadium location to modalData
+    modalData.userCity = stadium;
     // Split event into city and state
     city = stadium.split(",");
     // Push city only 
     apiData.eventCity = city[0];
     // Now that we have a city, run the function to convert it to a airport code
-    pushAirportArriveCode()
+    pushAirportArriveCode();
   })
 }; //Close pushCityData function
 
