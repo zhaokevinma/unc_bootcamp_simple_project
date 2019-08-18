@@ -18,9 +18,9 @@ var modalData = {
   userGame: "", //* You choose to see _ vs _ ...
   userDate: "", //* on _ ...
   userCity: "", //* in the city of _ 
-  userFlight: "", // You found a flight with _ ...
-  userFlightDate: "", // on _ ...
-  userFlightPrice: "", // for $ _
+  userFlight: "", //* You found a flight with _ ...
+  userFlightDate: "", //* on _ ...
+  userFlightPrice: "", //* for $ _
   userHotel: "", // And you're staying with _ ...
   userHotelDate: "", // from _ to _ ...
   userHotelPrice: "", // for $ _
@@ -316,12 +316,15 @@ function pushHotelDate () {
 // Run when user inputs days before event to leave (in pushFlightDate)
 function findFlight() {
   console.log("findFlight: ", apiData)
-
-  if (apiData.departAirport == false) {
+  if (apiData.eventDate == false) {
+    console.log("Need Event Date")
+  }
+  else if (apiData.departAirport == false) {
     console.log("Need city");
     $("#airport").css("border", "1px solid red")
   }
   else {
+    console.log("Finding Flight")
     $("#airport").css("border-width", "2px").css("border-style", "inset").css("border-color", "initial");
 
     $.ajax({
@@ -385,6 +388,7 @@ function findFlight() {
               // Make an option
               var option = $("<option>");
               option.attr("data-flight", flights[i].Name);
+              option.attr("data-flightprice", price);
               // show event data with flight
               option.text("Fly with " + flights[i].Name + " for $" + price);
               // Show flight in column
@@ -401,6 +405,17 @@ function findFlight() {
   }
 }; //Close findFlight function
 
+// * When user chooses flight, push airline and price
+// Run when user chooses flight
+function pushFlightData() {
+  var flight = this.options[this.selectedIndex].getAttribute("data-flight");
+  var price = this.options[this.selectedIndex].getAttribute("data-flightprice");
+
+  modalData.userFlight = flight;
+  modalData.userFlightDate = moment(apiData.flightDate, "YYYY-MM-DD").format("MMM Do YYYY")
+  modalData.userFlightPrice = price;
+}
+
 // * Pull hotel info in game city for time period
 // TODO Populate information in dropdown
 // Run when user chooses flight
@@ -408,75 +423,82 @@ function findFlight() {
 // Run when user inputs days to stay in city (in pushHotelDate)
 function findHotel() {
   console.log("findHotel: ", apiData);
-  return $.ajax({
-    url: "https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete",
-    data: {
-      languagecode: "en-us",
-      text: apiData.eventCity
-    },
-    headers: {
-      "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
-      "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
-    }
-  }).done(function (response) {
-    console.log(response);
-    var searchType = response[0].dest_type;
-    var destId = response[0].dest_id;
-    
-    $.ajax({
-      url: "https://apidojo-booking-v1.p.rapidapi.com/properties/list",
+  if (apiData.arriveAirport == false) {
+    console.log("Need city for hotel")
+  }
+  else {
+    console.log("Finding Hotel");
+
+    return $.ajax({
+      url: "https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete",
       data: {
-        departure_date: apiData.hotelDepartDate,
-        arrival_date: apiData.hotelArriveDate,
-        search_type: searchType,
-        dest_ids: destId,
+        languagecode: "en-us",
+        text: apiData.eventCity
       },
       headers: {
         "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
         "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
       }
     }).done(function (response) {
-      console.log("booking results working: ", response);
-      // Empty dropdown
-      $("#hotel").empty();
-
-      var hotels = response;
-
-      // If no rooms
-      if (hotels == null) {
-        console.log("No Hotels");
-        var option = $("<option>");
-        option.attr("id", "noRooms");
-        option.text("No Rooms available");
-        $("#hotel").append(option);
-      }
-      // if there are room options
-      else {
-        $("#hotel").append(pickHotel);
-
-        //Show list of hotels for game time period
-        for (var h = 0; h < hotels.length; h++) {
-          // Get Rooms
-          var rooms
-          // Get prices
-          var roomPrice
-          // Make an option
-          var option = $("<option>");
-          option.attr("data-room", rooms);
-
-          // show hotel and price
-          option.text("Stay with " + rooms + " for $" + roomPrice);
-          // Show flight in column
-          $("#flight2").append(option);
+      console.log(response);
+      var searchType = response[0].dest_type;
+      var destId = response[0].dest_id;
+      
+      $.ajax({
+        url: "https://apidojo-booking-v1.p.rapidapi.com/properties/list",
+        data: {
+          departure_date: apiData.hotelDepartDate,
+          arrival_date: apiData.hotelArriveDate,
+          search_type: searchType,
+          dest_ids: destId,
+        },
+        headers: {
+          "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
+          "x-rapidapi-key": "4fba5df7b8msh229636a0ecdf4e5p109982jsn50f9b16b19c2"
         }
-      }
+      }).done(function (response) {
+        console.log("booking results working: ", response);
+        // Empty dropdown
+        $("#hotel").empty();
 
-    }).fail(function() {
+        var hotels = response;
+
+        // If no rooms
+        if (hotels == null) {
+          console.log("No Hotels");
+          var option = $("<option>");
+          option.attr("id", "noRooms");
+          option.text("No Rooms available");
+          $("#hotel").append(option);
+        }
+        // if there are room options
+        else {
+          $("#hotel").append(pickHotel);
+
+          //Show list of hotels for game time period
+          for (var h = 0; h < hotels.length; h++) {
+            // Get Rooms
+            var rooms
+            // Get prices
+            var roomPrice
+            // Make an option
+            var option = $("<option>");
+            option.attr("data-room", rooms);
+
+            // show hotel and price
+            option.text("Stay with " + rooms + " for $" + roomPrice);
+            // Show flight in column
+            $("#flight2").append(option);
+          }
+        }
+
+      }).fail(function() {
+        console.error("error");
+      });
+    }).fail(function () {
       console.error("error");
     });
-  }).fail(function () {
-    console.error("error");
-  });
+  }
 }; //Close findHotel function
 
 // TODO Show selected information in modal
@@ -508,6 +530,7 @@ $("document").ready(function () {
 
   // User chooses flight
   $("#flight2").change(findHotel); // Populate flights
+  $("#flight2").change(pushFlightData); // Push flight and price to userData
 
   // User clicks submit button
   $(".btn-info").click(popModal);
