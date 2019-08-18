@@ -527,8 +527,6 @@ function popModal() {
       $(".modal-body").append(gameData);
       $(".modal-body").append(flightData);
       $(".modal-body").append(hotelData);
-      // Stop the function so it doesn't keep running of each loop through
-      return m;
     }
   }
 }; //Close popModal function
