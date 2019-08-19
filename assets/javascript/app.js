@@ -22,10 +22,10 @@ var modalData = {
   userFlight: "", //* You found a flight with _ ...
   userFlightDate: "", //* on _ ...
   userFlightPrice: "", //* for $ _
-  userHotel: "", // And you're staying with _ ...
-  userHotelArriveDate: "", // from _ ...
-  userHotelDepartDate: "", // to _ ...
-  userHotelPrice: "", // for $ _
+  userHotel: "filler", // And you're staying with _ ...
+  userHotelArriveDate: "filler", // from _ ...
+  userHotelDepartDate: "filler", // to _ ...
+  userHotelPrice: "filler", // for $ _
 }
 
 var pickTeam = $("<option>").text("Choose a Team");
@@ -364,17 +364,17 @@ function findFlight() {
             'x-rapidapi-key': '39679fe291msh490fd3370e51da5p1a43a2jsn13fddd01de35'
           }
         }).done(function (response) {
-          console.log(response);
+          console.log("Flights: ", response);
           // Empty dropdown
           $("#flight2").empty();
 
           var flights = response.Carriers;
 
           // If no flights
-          if (flights == null) {
+          if (flights.length == 0) {
             console.log("No flights");
             var option = $("<option>");
-            option.attr("id", "noEvent");
+            option.attr("id", "noFlight");
             option.text("No Flights available");
             $("#flight2").append(option);
           }
@@ -384,11 +384,12 @@ function findFlight() {
             //Show list of flights for game time period
             // show 3 of the AJAX calls, show flight in response
             for (var i = 0; i < 3; i++) {
-              // Get prices
               // Make an option
               var option = $("<option>");
+              // Airline names
               option.attr("data-flight", flights[i].Name);
-              // option.attr("data-flightprice", price);
+              // Prices
+              option.attr("data-flightprice", response.Itineraries[i].PricingOptions[0].Price);
               // show event data with flight
               option.text("Fly with " + flights[i].Name + " for $" + response.Itineraries[i].PricingOptions[0].Price);
               // Show flight in column
@@ -463,7 +464,7 @@ function findHotel() {
 
         var hotels = response;
 
-        // If no rooms
+        // TODO If no rooms
         if (hotels == null) {
           console.log("No Hotels");
           var option = $("<option>");
@@ -471,11 +472,11 @@ function findHotel() {
           option.text("No Rooms available");
           $("#hotel").append(option);
         }
-        // if there are room options
+        // TODO If there are room options
         else {
           $("#hotel").append(pickHotel);
 
-          //Show list of hotels for game time period
+          // TODO Show list of hotels for game time period
           for (var h = 0; h < hotels.length; h++) {
             // Get Rooms
             var rooms
