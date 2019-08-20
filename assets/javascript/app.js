@@ -22,10 +22,10 @@ var modalData = {
   userFlight: "", //* You found a flight with _ ...
   userFlightDate: "", //* on _ ...
   userFlightPrice: "", //* for $ _
-  userHotel: "filler", // And you're staying with _ ...
-  userHotelArriveDate: "filler", // from _ ...
-  userHotelDepartDate: "filler", // to _ ...
-  userHotelPrice: "filler", // for $ _
+  userHotel: "filler", //* And you're staying with _ ...
+  userHotelArriveDate: "", //* from _ ...
+  userHotelDepartDate: "", //* to _ ...
+  userHotelPrice: "filler", //* for $ _
 }
 
 var pickTeam = $("<option>").text("Choose a Team");
@@ -462,9 +462,9 @@ function findHotel() {
         // Empty dropdown
         $("#hotel").empty();
 
-        var hotels = response;
+        var hotels = response.result;
 
-        // TODO If no rooms
+        // If no rooms
         if (hotels == null) {
           console.log("No Hotels");
           var option = $("<option>");
@@ -472,27 +472,29 @@ function findHotel() {
           option.text("No Rooms available");
           $("#hotel").append(option);
         }
-        // TODO If there are room options
+        // If there are room options
         else {
           $("#hotel").append(pickHotel);
 
-          // TODO Show list of hotels for game time period
-          for (var h = 0; h < hotels.length; h++) {
-            // Get Rooms
-            var rooms
-            // Get prices
-            var roomPrice
-            // Make an option
-            var option = $("<option>");
-            option.attr("data-room", rooms);
-
-            // show hotel and price
-            option.text("Stay with " + rooms + " for $" + roomPrice);
-            // Show flight in column
-            $("#flight2").append(option);
+          // Show list of hotels for game time period
+          for (var h = 0; h < 5; h++) {
+            // TODO Get Rooms
+            var rooms = hotels[h].hotel_name
+            console.log("Rooms: ", rooms)
+            // TODO Get prices
+              var roomPrice = JSON.stringify(hotels[h].price_breakdown.all_inclusive_price);
+              console.log("Room price: ", roomPrice)
+              // Make an option
+              var option = $("<option>");
+              option.attr("data-room", rooms);
+              option.attr("data-roomprice", roomPrice);
+  
+              // show hotel and price
+              option.text("Stay with " + rooms + " for $" + roomPrice);
+              // Show flight in column
+              $("#hotel").append(option);
           }
         }
-
       }).fail(function() {
         console.error("error");
       });
@@ -502,9 +504,23 @@ function findHotel() {
   }
 }; //Close findHotel function
 
-// TODO Show selected information in modal
+// * Get hotel data
+// Run when user selects a hotel
+function pushHotelData() {
+  console.log("pushHotelData");
+  var room = this.options[this.selectedIndex].getAttribute("data-room");
+  var price = this.options[this.selectedIndex].getAttribute("data-roomprice");
+
+  modalData.userHotel = room;
+  modalData.userHotelPrice = price;
+  modalData.userHotelArriveDate = moment(apiData.hotelArriveDate, "YYYY-MM-DD").format("MMM Do YYYY")
+  modalData.userHotelDepartDate = moment(apiData.hotelDepartDate, "YYYY-MM-DD").format("MMM Do YYYY")
+}; //Close pushHotelData function
+
+// Show selected information in modal
 // Run when user clicks submit
 function popModal() {
+  console.log("Pop Modal: ", modalData)
   var data =  Object.values(modalData);
 
   for (m = 0; m < data.length; m++) {
@@ -554,6 +570,9 @@ $("document").ready(function () {
   // User chooses flight
   $("#flight2").change(findHotel); // Populate flights
   $("#flight2").change(pushFlightData); // Push flight and price to userData
+
+  // User chooses hotel
+  $("#hotel").change(pushHotelData); // Push hotel room and price to userData
 
   // User clicks submit button
   $(".btn-info").click(popModal);
