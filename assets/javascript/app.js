@@ -478,21 +478,27 @@ function findHotel() {
 
           // Show list of hotels for game time period
           for (var h = 0; h < 5; h++) {
-            // TODO Get Rooms
+            // Get Rooms
             var rooms = hotels[h].hotel_name
             console.log("Rooms: ", rooms)
-            // TODO Get prices
-              var roomPrice = JSON.stringify(hotels[h].price_breakdown.all_inclusive_price);
-              console.log("Room price: ", roomPrice)
+            // Get prices
+            var roomPrice = hotels[h].min_total_price;
+            console.log("Rooms Price: ", roomPrice)
+            if (roomPrice == 0) {
+              console.log("No Price")
+              continue;
+            }
+            else {
               // Make an option
               var option = $("<option>");
               option.attr("data-room", rooms);
               option.attr("data-roomprice", roomPrice);
-  
+
               // show hotel and price
               option.text("Stay with " + rooms + " for $" + roomPrice);
               // Show flight in column
               $("#hotel").append(option);
+            }
           }
         }
       }).fail(function() {
